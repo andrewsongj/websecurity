@@ -1,1 +1,3 @@
 https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/07-Input_Validation_Testing/05-Testing_for_SQL_Injection
+https://cvk.posthaven.com/sql-injection-with-raw-md5-hashes
+https://superfastpython.com/multiprocessing-pool-first-result/#Issue_Tasks_Using_imap_unordered
