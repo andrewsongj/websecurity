@@ -131,7 +131,7 @@ def getHistory(user_id):
     # Note: Make sure the query text is at index 0 in the returned rows. 
     # Otherwise you will get an error when the templating engine tries to use this object to build the HTML reply.
     cur.execute(
-        "SELECT query FROM history WHERE user_id = %s ORDER BY id DESC LIMIT 15;"
+        "SELECT query FROM history WHERE user_id = %s ORDER BY id DESC LIMIT 15;",
         (user_id,)
     )
 
