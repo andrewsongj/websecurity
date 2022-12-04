@@ -4,3 +4,5 @@ https://superfastpython.com/multiprocessing-pool-first-result/#Issue_Tasks_Using
 https://portswigger.net/web-security/sql-injection/union-attacks
 https://stackoverflow.com/questions/19558443/comma-separated-string-of-selected-values-in-mysql
 https://www.datameer.com/blog/sql_how-to-display-all-the-tables-from-a-database/
+https://portswigger.net/web-security/cross-site-scripting/exploiting/lab-perform-csrf
+https://www.w3schools.com/tags/ref_urlencode.ASP
