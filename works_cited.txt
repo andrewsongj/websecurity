@@ -8,3 +8,10 @@ https://portswigger.net/web-security/cross-site-scripting/exploiting/lab-perform
 https://www.w3schools.com/tags/ref_urlencode.ASP
 https://www.toptal.com/developers/javascript-minifier
 https://stackoverflow.com/a/18170009
+https://developer.mozilla.org/en-US/docs/Web/API/Window/popstate_event
+https://stackoverflow.com/questions/28028297/js-window-history-delete-a-state
+https://stackoverflow.com/questions/10857590/javascript-encodeuricomponent-and-converting-spaces-to-symbols
+https://stackoverflow.com/questions/17094230/how-do-i-loop-through-children-objects-in-javascript
+https://davidwalsh.name/change-title-javascript
+https://stackoverflow.com/questions/50647136/forward-button-not-working-after-history-pushstate
+https://developer.mozilla.org/en-US/docs/Web/API/History/pushState
